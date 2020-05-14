@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.core.mail import send_mail
 
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -35,3 +36,6 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        send_mail(subject, message, from_email, [self.email], **kwargs)
